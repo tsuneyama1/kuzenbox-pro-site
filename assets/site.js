@@ -1,6 +1,4 @@
-const releaseDownloadUrl =
-  "https://github.com/tsuneyama1/kuzenbox-pro-site/releases/download/v4.0.1-pro/kuzenbox_pro-setup.exe";
-
+const releaseDownloadUrl = "./downloads/kuzenbox_pro-setup.exe";
 const localDownloadUrl = "./downloads/kuzenbox_pro-setup.exe";
 const activeDownloadUrl = location.protocol === "file:" ? localDownloadUrl : releaseDownloadUrl;
 const accessPasswordHash = "184dc9f5cd08a35edd6d01d5eb38782b1f87d37a79d3870c18d0c7361c20a507";
@@ -54,46 +52,21 @@ document.querySelectorAll(".download-link").forEach((link) => {
 });
 
 const heroWord = document.querySelector("#hero-word");
-const stageStatus = document.querySelector("#stage-status");
-const heroWords = [
-  { word: "every packet", status: "TUN / ACTIVE" },
-  { word: "DNS queries", status: "DNS / GUARDED" },
-  { word: "AnyTLS flows", status: "ANYTLS / READY" },
-  { word: "rule sets", status: "RULES / SYNCED" },
-];
+const heroWords = ["every packet", "DNS queries", "AnyTLS flows", "rule sets"];
 
-if (heroWord && stageStatus) {
-  heroWord.textContent = heroWords[0].word;
-  stageStatus.textContent = heroWords[0].status;
+if (heroWord) {
+  heroWord.textContent = heroWords[0];
 }
 
 let heroIndex = 0;
-if (heroWord && stageStatus && !reduceMotion) {
+if (heroWord && !reduceMotion) {
   window.setInterval(() => {
     heroIndex = (heroIndex + 1) % heroWords.length;
     heroWord.classList.add("is-changing");
 
     window.setTimeout(() => {
-      heroWord.textContent = heroWords[heroIndex].word;
-      stageStatus.textContent = heroWords[heroIndex].status;
+      heroWord.textContent = heroWords[heroIndex];
       heroWord.classList.remove("is-changing");
     }, 360);
   }, 3200);
 }
-
-const featureTabs = [...document.querySelectorAll(".feature-tab")];
-const featurePanels = [...document.querySelectorAll(".feature-panel")];
-let activeFeature = 0;
-
-function setFeature(index) {
-  activeFeature = index % featurePanels.length;
-  featureTabs.forEach((tab, tabIndex) => tab.classList.toggle("is-active", tabIndex === activeFeature));
-  featurePanels.forEach((panel, panelIndex) => panel.classList.toggle("is-active", panelIndex === activeFeature));
-}
-
-featureTabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-    const next = Number(tab.dataset.feature || 0);
-    setFeature(next);
-  });
-});
