@@ -168,9 +168,14 @@
               A Windows proxy client built for TUN-level control, DNS leak protection, and modern sing-box routing.
             </p>
             <div class="story-facts" aria-label="Release information">
-              <div><span>Version</span><strong>4.0.1</strong></div>
-              <div><span>Installer</span><strong>38.7 MiB</strong></div>
+              <div><span>Version</span><strong id="release-version">4.0.2</strong></div>
+              <div><span>Installer</span><strong id="release-size">Pending</strong></div>
               <div><span>Core</span><strong>sing-box</strong></div>
+            </div>
+            <div class="release-picker" aria-label="Version selector">
+              <label for="release-select">Version</label>
+              <select id="release-select"></select>
+              <ul id="release-notes" class="release-notes"></ul>
             </div>
           </div>
 
@@ -186,7 +191,7 @@
               <span class="plane-piece trail trail-c"></span>
             </div>
             <a class="button primary large download-link" href="#" download>
-              <span>Start Your Safe Connection To The World</span>
+              <span id="download-label">Start Your Safe Connection To The World</span>
             </a>
           </div>
         </section>

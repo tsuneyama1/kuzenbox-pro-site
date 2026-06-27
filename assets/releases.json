@@ -1,0 +1,24 @@
+[
+  {
+    "version": "4.0.2",
+    "date": "2026-06-27",
+    "file": "kuzenbox_pro-4.0.2-setup.exe",
+    "size": "24.2 MiB",
+    "latest": true,
+    "changes": [
+      "Added optional STUN/WebRTC leak protection for users who enable it.",
+      "Added version selection on the KuzenBox Pro download site."
+    ]
+  },
+  {
+    "version": "4.0.1",
+    "date": "2024-12-12",
+    "file": "kuzenbox_pro-4.0.1-setup.exe",
+    "size": "38.7 MiB",
+    "latest": false,
+    "changes": [
+      "Windows proxy client with TUN-level routing.",
+      "DNS leak protection, AnyTLS support, and modern sing-box routing."
+    ]
+  }
+]

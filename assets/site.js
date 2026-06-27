@@ -1,6 +1,28 @@
-const releaseDownloadUrl = "./downloads/kuzenbox_pro-setup.exe";
-const localDownloadUrl = "./downloads/kuzenbox_pro-setup.exe";
-const activeDownloadUrl = location.protocol === "file:" ? localDownloadUrl : releaseDownloadUrl;
+const releaseManifestUrl = "./assets/releases.json";
+const fallbackReleases = [
+  {
+    version: "4.0.2",
+    date: "2026-06-27",
+    file: "kuzenbox_pro-4.0.2-setup.exe",
+    size: "24.2 MiB",
+    latest: true,
+    changes: [
+      "Added optional STUN/WebRTC leak protection for users who enable it.",
+      "Added version selection on the KuzenBox Pro download site."
+    ]
+  },
+  {
+    version: "4.0.1",
+    date: "2024-12-12",
+    file: "kuzenbox_pro-4.0.1-setup.exe",
+    size: "38.7 MiB",
+    latest: false,
+    changes: [
+      "Windows proxy client with TUN-level routing.",
+      "DNS leak protection, AnyTLS support, and modern sing-box routing."
+    ]
+  }
+];
 const accessPasswordHash = "184dc9f5cd08a35edd6d01d5eb38782b1f87d37a79d3870c18d0c7361c20a507";
 const accessSessionKey = "kuzenbox_pro_access";
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -46,9 +68,71 @@ document.querySelector("#password-form")?.addEventListener("submit", async (even
   input.select();
 });
 
-document.querySelectorAll(".download-link").forEach((link) => {
-  link.href = activeDownloadUrl;
-  link.setAttribute("aria-label", "Download KuzenBox Pro Windows installer");
+function downloadUrlFor(release) {
+  if (release?.latest) return "./downloads/kuzenbox_pro-setup.exe";
+  return `./downloads/${release.file}`;
+}
+
+function renderRelease(release) {
+  if (!release) return;
+
+  const version = document.querySelector("#release-version");
+  const size = document.querySelector("#release-size");
+  const notes = document.querySelector("#release-notes");
+  const label = document.querySelector("#download-label");
+  const url = downloadUrlFor(release);
+
+  if (version) version.textContent = release.version;
+  if (size) size.textContent = release.size;
+  if (label) label.textContent = `Download KuzenBox Pro ${release.version}`;
+  if (notes) {
+    notes.replaceChildren(
+      ...release.changes.map((change) => {
+        const item = document.createElement("li");
+        item.textContent = change;
+        return item;
+      })
+    );
+  }
+
+  document.querySelectorAll(".download-link").forEach((link) => {
+    link.href = url;
+    link.download = release.latest ? "kuzenbox_pro-setup.exe" : release.file;
+    link.setAttribute("aria-label", `Download KuzenBox Pro ${release.version} Windows installer`);
+  });
+}
+
+async function loadReleases() {
+  try {
+    const response = await fetch(releaseManifestUrl, { cache: "no-store" });
+    if (!response.ok) throw new Error("Release manifest unavailable");
+    return await response.json();
+  } catch {
+    return fallbackReleases;
+  }
+}
+
+loadReleases().then((releases) => {
+  const releaseList = Array.isArray(releases) && releases.length > 0 ? releases : fallbackReleases;
+  const select = document.querySelector("#release-select");
+  const latest = releaseList.find((release) => release.latest) ?? releaseList[0];
+
+  if (select) {
+    select.replaceChildren(
+      ...releaseList.map((release) => {
+        const option = document.createElement("option");
+        option.value = release.version;
+        option.textContent = `${release.version} - ${release.date}${release.latest ? " - latest" : ""}`;
+        return option;
+      })
+    );
+    select.value = latest.version;
+    select.addEventListener("change", () => {
+      renderRelease(releaseList.find((release) => release.version === select.value) ?? latest);
+    });
+  }
+
+  renderRelease(latest);
 });
 
 const heroWord = document.querySelector("#hero-word");
