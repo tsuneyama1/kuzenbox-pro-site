@@ -1,14 +1,15 @@
 const releaseManifestUrl = "./assets/releases.json";
 const fallbackReleases = [
   {
-    version: "4.0.2",
-    date: "2026-06-27",
-    file: "kuzenbox_pro-4.0.2-setup.exe",
-    size: "24.2 MiB",
+    version: "4.1.0",
+    date: "2026-06-29",
+    file: "kuzenbox_pro-4.1.0-setup.exe",
+    size: "39.5 MiB",
     latest: true,
     changes: [
-      "Added optional STUN/WebRTC leak protection for users who enable it.",
-      "Added version selection on the KuzenBox Pro download site."
+      "Added optional STUN/WebRTC leak protection to block STUN traffic when enabled.",
+      "Installer upgrades existing KuzenBox Pro installs in place while preserving and migrating config, groups, profiles, routes, and global settings.",
+      "Download site now publishes KuzenBox Pro 4.1.0 as the latest version."
     ]
   },
   {

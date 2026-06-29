@@ -24,13 +24,13 @@ The public CTA points to:
 The latest installer should also be copied to its versioned filename, for example:
 
 ```text
-./downloads/kuzenbox_pro-4.0.2-setup.exe
+./downloads/kuzenbox_pro-4.1.0-setup.exe
 ```
 
 The installer should be refreshed from the project build output:
 
 ```text
-E:\kuzenbox\site\downloads\kuzenbox_pro-setup.exe
+E:\kuzenbox_pro\dist\kuzenbox_pro-setup.exe
 ```
 
 ## GitHub Pages
