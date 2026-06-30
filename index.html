@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="KuzenBox Pro download site. A Windows proxy client with TUN routing, DNS leak protection, AnyTLS support, and a sing-box core."
+      content="KuzenBox Pro download site. A desktop proxy client with TUN routing, DNS leak protection, STUN/WebRTC leak protection, AnyTLS support, and a sing-box core."
     />
     <meta name="theme-color" content="#2C2824" />
     <meta property="og:title" content="KuzenBox Pro" />
@@ -13,8 +13,8 @@
     <meta property="og:type" content="website" />
     <title>KuzenBox Pro | Safe connection to the world</title>
     <link rel="icon" href="assets/kuzenbox.png" />
-    <link rel="stylesheet" href="assets/site.css?v=no-birds-fit3-20260617" />
-    <script defer src="assets/site.js?v=no-birds-fit3-20260617"></script>
+    <link rel="stylesheet" href="assets/site.css?v=os-select-20260630" />
+    <script defer src="assets/site.js?v=os-select-20260630"></script>
   </head>
   <body class="locked loading">
     <section class="password-gate" aria-labelledby="gate-title">
@@ -165,17 +165,23 @@
               with intent.
             </h2>
             <p class="story-lede">
-              A Windows proxy client built for TUN-level control, DNS leak protection, and modern sing-box routing.
+              A desktop proxy client built for TUN-level control, DNS leak protection, STUN/WebRTC leak protection,
+              and modern sing-box routing.
             </p>
+            <div class="platform-select" aria-label="Choose operating system">
+              <button class="platform-option is-active" type="button" data-platform="windows">Windows</button>
+              <button class="platform-option" type="button" data-platform="linux">Linux</button>
+            </div>
             <div class="story-facts" aria-label="Release information">
               <div><span>Version</span><strong id="release-version">4.1.0</strong></div>
-              <div><span>Installer</span><strong id="release-size">Pending</strong></div>
-              <div><span>Core</span><strong>sing-box</strong></div>
+              <div><span>Package</span><strong id="release-package">Windows x64 installer</strong></div>
+              <div><span>Size</span><strong id="release-size">Pending</strong></div>
             </div>
             <div class="release-picker" aria-label="Version selector">
               <label for="release-select">Version</label>
               <select id="release-select"></select>
               <ul id="release-notes" class="release-notes"></ul>
+              <p class="checksum">SHA256 <code id="release-sha256">Pending</code></p>
             </div>
           </div>
 

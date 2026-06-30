@@ -1,32 +1,59 @@
 const releaseManifestUrl = "./assets/releases.json";
-const fallbackReleases = [
-  {
-    version: "4.1.0",
-    date: "2026-06-29",
-    file: "kuzenbox_pro-4.1.0-setup.exe",
-    size: "39.5 MiB",
-    latest: true,
-    changes: [
-      "Added optional STUN/WebRTC leak protection to block STUN traffic when enabled.",
-      "Installer upgrades existing KuzenBox Pro installs in place while preserving and migrating config, groups, profiles, routes, and global settings.",
-      "Download site now publishes KuzenBox Pro 4.1.0 as the latest version."
-    ]
+const fallbackReleaseManifest = {
+  latest: "4.1.0",
+  platforms: {
+    windows: [
+      {
+        version: "4.1.0",
+        date: "2026-06-29",
+        file: "kuzenbox_pro-4.1.0-setup.exe",
+        size: "39.5 MiB",
+        package: "Windows x64 installer",
+        sha256: "DC1EA74C4A01DFC6226BF8D3BA972FC85DA68D6F0E49791775FC0DC581FF5633",
+        latest: true,
+        changes: [
+          "Added optional STUN/WebRTC leak protection to block STUN traffic when enabled.",
+          "Installer upgrades existing KuzenBox Pro installs in place while preserving and migrating config, groups, profiles, routes, and global settings.",
+          "Download site publishes KuzenBox Pro 4.1.0 as the latest Windows version.",
+        ],
+      },
+      {
+        version: "4.0.1",
+        date: "2024-12-12",
+        file: "kuzenbox_pro-4.0.1-setup.exe",
+        size: "38.7 MiB",
+        package: "Windows x64 installer",
+        latest: false,
+        changes: [
+          "Windows proxy client with TUN-level routing.",
+          "DNS leak protection, AnyTLS support, and modern sing-box routing.",
+        ],
+      },
+    ],
+    linux: [
+      {
+        version: "4.1.0",
+        date: "2026-06-29",
+        file: "kuzenbox_pro-4.1.0-linux-amd64.deb",
+        size: "15.4 MiB",
+        package: "Linux amd64 DEB",
+        sha256: "D9C46C6B2776B08ADA8737EBE713C2A4FFBA630482220F4C86D5AC98ACC29B92",
+        latest: true,
+        changes: [
+          "New Linux amd64 DEB package for Ubuntu 22.04/24.04+ and Debian 12+ desktops.",
+          "Installs to /opt/kuzenbox_pro and configures cap_net_admin on the sing-box core for TUN Mode.",
+          "Local Ubuntu VM checks covered GUI launch, subscription import, TUN Mode, system proxy backend, DNS leak protection, and STUN/WebRTC protection.",
+        ],
+      },
+    ],
   },
-  {
-    version: "4.0.1",
-    date: "2024-12-12",
-    file: "kuzenbox_pro-4.0.1-setup.exe",
-    size: "38.7 MiB",
-    latest: false,
-    changes: [
-      "Windows proxy client with TUN-level routing.",
-      "DNS leak protection, AnyTLS support, and modern sing-box routing."
-    ]
-  }
-];
+};
 const accessPasswordHash = "184dc9f5cd08a35edd6d01d5eb38782b1f87d37a79d3870c18d0c7361c20a507";
 const accessSessionKey = "kuzenbox_pro_access";
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let activeManifest = fallbackReleaseManifest;
+let selectedPlatform = "windows";
+let selectedReleaseList = fallbackReleaseManifest.platforms.windows;
 
 async function sha256Hex(value) {
   const data = new TextEncoder().encode(value);
@@ -69,71 +96,118 @@ document.querySelector("#password-form")?.addEventListener("submit", async (even
   input.select();
 });
 
+function normalizeManifest(raw) {
+  if (raw?.platforms?.windows && raw?.platforms?.linux) return raw;
+  if (Array.isArray(raw)) {
+    return {
+      latest: raw.find((release) => release.latest)?.version ?? raw[0]?.version ?? fallbackReleaseManifest.latest,
+      platforms: {
+        windows: raw,
+        linux: fallbackReleaseManifest.platforms.linux,
+      },
+    };
+  }
+  return fallbackReleaseManifest;
+}
+
+function releasesFor(platform) {
+  return activeManifest.platforms[platform] ?? activeManifest.platforms.windows;
+}
+
 function downloadUrlFor(release) {
-  if (release?.latest) return "./downloads/kuzenbox_pro-setup.exe";
+  if (selectedPlatform === "windows" && release?.latest) return "./downloads/kuzenbox_pro-setup.exe";
   return `./downloads/${release.file}`;
+}
+
+function setText(selector, value) {
+  const element = document.querySelector(selector);
+  if (element) element.textContent = value;
 }
 
 function renderRelease(release) {
   if (!release) return;
 
-  const version = document.querySelector("#release-version");
-  const size = document.querySelector("#release-size");
   const notes = document.querySelector("#release-notes");
   const label = document.querySelector("#download-label");
   const url = downloadUrlFor(release);
+  const platformLabel = selectedPlatform === "linux" ? "Linux" : "Windows";
 
-  if (version) version.textContent = release.version;
-  if (size) size.textContent = release.size;
-  if (label) label.textContent = `Download KuzenBox Pro ${release.version}`;
+  setText("#release-version", release.version);
+  setText("#release-package", release.package ?? (selectedPlatform === "linux" ? "Linux amd64 DEB" : "Windows installer"));
+  setText("#release-size", release.size);
+  setText("#release-sha256", release.sha256 ?? "Not listed");
+  if (label) label.textContent = `Download KuzenBox Pro ${release.version} for ${platformLabel}`;
+
   if (notes) {
     notes.replaceChildren(
-      ...release.changes.map((change) => {
+      ...(release.changes ?? []).map((change) => {
         const item = document.createElement("li");
         item.textContent = change;
         return item;
-      })
+      }),
     );
   }
 
   document.querySelectorAll(".download-link").forEach((link) => {
     link.href = url;
-    link.download = release.latest ? "kuzenbox_pro-setup.exe" : release.file;
-    link.setAttribute("aria-label", `Download KuzenBox Pro ${release.version} Windows installer`);
+    link.download = selectedPlatform === "windows" && release.latest ? "kuzenbox_pro-setup.exe" : release.file;
+    link.setAttribute("aria-label", `Download KuzenBox Pro ${release.version} ${release.package ?? platformLabel}`);
   });
+}
+
+function renderPlatform(platform) {
+  selectedPlatform = platform;
+  selectedReleaseList = releasesFor(platform);
+
+  document.querySelectorAll(".platform-option").forEach((button) => {
+    const active = button.dataset.platform === platform;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+
+  const select = document.querySelector("#release-select");
+  const latest = selectedReleaseList.find((release) => release.latest) ?? selectedReleaseList[0];
+
+  if (select) {
+    select.replaceChildren(
+      ...selectedReleaseList.map((release) => {
+        const option = document.createElement("option");
+        option.value = release.version;
+        option.textContent = `${release.version} - ${release.date}${release.latest ? " - latest" : ""}`;
+        return option;
+      }),
+    );
+    select.value = latest.version;
+  }
+
+  renderRelease(latest);
 }
 
 async function loadReleases() {
   try {
     const response = await fetch(releaseManifestUrl, { cache: "no-store" });
     if (!response.ok) throw new Error("Release manifest unavailable");
-    return await response.json();
+    return normalizeManifest(await response.json());
   } catch {
-    return fallbackReleases;
+    return fallbackReleaseManifest;
   }
 }
 
-loadReleases().then((releases) => {
-  const releaseList = Array.isArray(releases) && releases.length > 0 ? releases : fallbackReleases;
-  const select = document.querySelector("#release-select");
-  const latest = releaseList.find((release) => release.latest) ?? releaseList[0];
+document.querySelector("#release-select")?.addEventListener("change", (event) => {
+  const release = selectedReleaseList.find((item) => item.version === event.target.value) ?? selectedReleaseList[0];
+  renderRelease(release);
+});
 
-  if (select) {
-    select.replaceChildren(
-      ...releaseList.map((release) => {
-        const option = document.createElement("option");
-        option.value = release.version;
-        option.textContent = `${release.version} - ${release.date}${release.latest ? " - latest" : ""}`;
-        return option;
-      })
-    );
-    select.value = latest.version;
-    select.addEventListener("change", () => {
-      renderRelease(releaseList.find((release) => release.version === select.value) ?? latest);
-    });
-  }
+document.querySelectorAll(".platform-option").forEach((button) => {
+  button.setAttribute("aria-pressed", button.classList.contains("is-active") ? "true" : "false");
+  button.addEventListener("click", () => renderPlatform(button.dataset.platform ?? selectedPlatform));
+});
 
-  renderRelease(latest);
+renderPlatform(selectedPlatform);
+
+loadReleases().then((manifest) => {
+  activeManifest = manifest;
+  renderPlatform(selectedPlatform);
 });
 
 const heroWord = document.querySelector("#hero-word");

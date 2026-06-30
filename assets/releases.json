@@ -1,25 +1,49 @@
-[
-  {
-    "version": "4.1.0",
-    "date": "2026-06-29",
-    "file": "kuzenbox_pro-4.1.0-setup.exe",
-    "size": "39.5 MiB",
-    "latest": true,
-    "changes": [
-      "Added optional STUN/WebRTC leak protection to block STUN traffic when enabled.",
-      "Installer upgrades existing KuzenBox Pro installs in place while preserving and migrating config, groups, profiles, routes, and global settings.",
-      "Download site now publishes KuzenBox Pro 4.1.0 as the latest version."
-    ]
-  },
-  {
-    "version": "4.0.1",
-    "date": "2024-12-12",
-    "file": "kuzenbox_pro-4.0.1-setup.exe",
-    "size": "38.7 MiB",
-    "latest": false,
-    "changes": [
-      "Windows proxy client with TUN-level routing.",
-      "DNS leak protection, AnyTLS support, and modern sing-box routing."
+{
+  "latest": "4.1.0",
+  "platforms": {
+    "windows": [
+      {
+        "version": "4.1.0",
+        "date": "2026-06-29",
+        "file": "kuzenbox_pro-4.1.0-setup.exe",
+        "size": "39.5 MiB",
+        "package": "Windows x64 installer",
+        "sha256": "DC1EA74C4A01DFC6226BF8D3BA972FC85DA68D6F0E49791775FC0DC581FF5633",
+        "latest": true,
+        "changes": [
+          "Added optional STUN/WebRTC leak protection to block STUN traffic when enabled.",
+          "Installer upgrades existing KuzenBox Pro installs in place while preserving and migrating config, groups, profiles, routes, and global settings.",
+          "Download site publishes KuzenBox Pro 4.1.0 as the latest Windows version."
+        ]
+      },
+      {
+        "version": "4.0.1",
+        "date": "2024-12-12",
+        "file": "kuzenbox_pro-4.0.1-setup.exe",
+        "size": "38.7 MiB",
+        "package": "Windows x64 installer",
+        "latest": false,
+        "changes": [
+          "Windows proxy client with TUN-level routing.",
+          "DNS leak protection, AnyTLS support, and modern sing-box routing."
+        ]
+      }
+    ],
+    "linux": [
+      {
+        "version": "4.1.0",
+        "date": "2026-06-29",
+        "file": "kuzenbox_pro-4.1.0-linux-amd64.deb",
+        "size": "15.4 MiB",
+        "package": "Linux amd64 DEB",
+        "sha256": "D9C46C6B2776B08ADA8737EBE713C2A4FFBA630482220F4C86D5AC98ACC29B92",
+        "latest": true,
+        "changes": [
+          "New Linux amd64 DEB package for Ubuntu 22.04/24.04+ and Debian 12+ desktops.",
+          "Installs to /opt/kuzenbox_pro and configures cap_net_admin on the sing-box core for TUN Mode.",
+          "Local Ubuntu VM checks covered GUI launch, subscription import, TUN Mode, system proxy backend, DNS leak protection, and STUN/WebRTC protection."
+        ]
+      }
     ]
   }
-]
+}

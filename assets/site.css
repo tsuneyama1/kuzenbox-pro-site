@@ -1102,6 +1102,40 @@ h2 {
   font-weight: 430;
 }
 
+.platform-select {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(108px, 1fr));
+  gap: 0;
+  margin: 0 0 clamp(14px, 2vh, 22px);
+  border: 1px solid rgba(168, 148, 116, 0.58);
+  background: rgba(24, 21, 18, 0.38);
+}
+
+.platform-option {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 0;
+  border-right: 1px solid rgba(168, 148, 116, 0.42);
+  color: var(--muted);
+  background: transparent;
+  font-size: 0.74rem;
+  font-weight: 790;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.platform-option:last-child {
+  border-right: 0;
+}
+
+.platform-option:hover,
+.platform-option:focus-visible,
+.platform-option.is-active {
+  color: var(--ink);
+  background: var(--khaki-light);
+  outline: none;
+}
+
 .release-picker {
   display: grid;
   gap: 12px;
@@ -1155,6 +1189,21 @@ h2 {
   width: 8px;
   height: 2px;
   background: var(--khaki);
+}
+
+.checksum {
+  margin: 0;
+  color: var(--faint);
+  font-size: 0.68rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.checksum code {
+  color: var(--khaki-light);
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  text-transform: none;
 }
 
 .plane-panel {
@@ -1573,6 +1622,17 @@ h2 {
 
   .story-facts {
     grid-template-columns: 1fr;
+  }
+
+  .platform-select {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .platform-option {
+    min-width: 0;
+    padding: 0 10px;
   }
 
   .story-facts div {
