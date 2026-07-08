@@ -1,8 +1,23 @@
 const releaseManifestUrl = "./assets/releases.json";
 const fallbackReleaseManifest = {
-  latest: "4.1.0",
+  latest: "4.2.0",
   platforms: {
     windows: [
+      {
+        version: "4.2.0",
+        date: "2026-07-08",
+        file: "kuzenbox_pro-4.2.0-setup.exe",
+        size: "41.4 MiB",
+        package: "Windows x64 installer",
+        sha256: "43B39AFAC1CC4423B144F7B07BF8293EB2D90A7E4AE8D5FDFE8137E758F43DF2",
+        latest: true,
+        changes: [
+          "Added Smart Select for healthier automatic node selection and failover within the current group.",
+          "Added Leak & Config Diagnostics, rule-set management, sing-box config validation, deprecated-field scanning, and config backup/import tools.",
+          "Added automatic local config snapshots before subscription updates and destructive profile operations.",
+          "Removed the top-level Ads and Document buttons to simplify the main interface while keeping feature-specific help where needed.",
+        ],
+      },
       {
         version: "4.1.0",
         date: "2026-06-29",
@@ -10,7 +25,7 @@ const fallbackReleaseManifest = {
         size: "39.5 MiB",
         package: "Windows x64 installer",
         sha256: "DC1EA74C4A01DFC6226BF8D3BA972FC85DA68D6F0E49791775FC0DC581FF5633",
-        latest: true,
+        latest: false,
         changes: [
           "Added optional STUN/WebRTC leak protection to block STUN traffic when enabled.",
           "Installer upgrades existing KuzenBox Pro installs in place while preserving and migrating config, groups, profiles, routes, and global settings.",
@@ -32,13 +47,27 @@ const fallbackReleaseManifest = {
     ],
     linux: [
       {
+        version: "4.2.0",
+        date: "2026-07-08",
+        file: "kuzenbox_pro-4.2.0-linux-amd64.deb",
+        size: "15.4 MiB",
+        package: "Linux amd64 DEB",
+        sha256: "2025020E0DBEA177572321E6243A72AD93B13D62306EBF1A83A77064F8564267",
+        latest: true,
+        changes: [
+          "Updated Linux build to KuzenBox Pro 4.2.0 with Smart Select, diagnostics, rule-set management, config validation, and backup tools.",
+          "Keeps TUN Mode, DNS leak protection, STUN/WebRTC leak protection, system proxy support, and sing-box core packaging for Debian/Ubuntu desktops.",
+          "Validated in a local Ubuntu environment: DEB install, GUI launch, subscription import, TUN startup, DNS/STUN protection toggles, Smart Select, and core cap_net_admin.",
+        ],
+      },
+      {
         version: "4.1.0",
         date: "2026-06-29",
         file: "kuzenbox_pro-4.1.0-linux-amd64.deb",
         size: "15.4 MiB",
         package: "Linux amd64 DEB",
         sha256: "D9C46C6B2776B08ADA8737EBE713C2A4FFBA630482220F4C86D5AC98ACC29B92",
-        latest: true,
+        latest: false,
         changes: [
           "New Linux amd64 DEB package for Ubuntu 22.04/24.04+ and Debian 12+ desktops.",
           "Installs to /opt/kuzenbox_pro and configures cap_net_admin on the sing-box core for TUN Mode.",

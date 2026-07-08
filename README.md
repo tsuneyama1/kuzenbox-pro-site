@@ -20,20 +20,20 @@ The public CTA points to:
 
 ```text
 ./downloads/kuzenbox_pro-setup.exe
-./downloads/kuzenbox_pro-4.1.0-linux-amd64.deb
+./downloads/kuzenbox_pro-4.2.0-linux-amd64.deb
 ```
 
 The latest installer should also be copied to its versioned filename, for example:
 
 ```text
-./downloads/kuzenbox_pro-4.1.0-setup.exe
+./downloads/kuzenbox_pro-4.2.0-setup.exe
 ```
 
 The installer should be refreshed from the project build output:
 
 ```text
 E:\kuzenbox_pro\dist\kuzenbox_pro-setup.exe
-E:\kuzenbox_pro\dist\linux\kuzenbox_pro-4.1.0-linux-amd64.deb
+E:\kuzenbox_pro\dist\linux\kuzenbox_pro-4.2.0-linux-amd64.deb
 ```
 
 ## GitHub Pages
